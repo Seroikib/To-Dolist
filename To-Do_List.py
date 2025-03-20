@@ -1,79 +1,66 @@
-import json
 import random
-quotes=[
-  "Code is like humor. When you have to explain it, it’s bad.",
-    "Programming isn't about what you know; it’s about what you can figure out.",
-    "The only way to learn a new programming language is by writing programs in it.",
-    "Simplicity is the soul of efficiency."
-]
-try:
-  with open("tasks.json","r") as file:
-    tasks=json.load(file)
-except FileNotFoundError:
-  tasks=[]
+skills=[]
+quotes=[ "'The secret of getting ahead is getting started.' – Mark Twain",
+    "'Don't watch the clock; do what it does. Keep going.' – Sam Levenson",
+    "'It always seems impossible until it’s done.' – Nelson Mandela",
+    "'Small daily improvements are the key to staggering long-term results.' – Unknown",
+    "'You don’t have to be great to start, but you have to start to be great.' – Zig Ziglar",
+    "'The way to get started is to quit talking and begin doing.' – Walt Disney"]
+def motivation():
+  return random.choice(quotes)
 def addSkill():
-  skill=input("Enter The Skill You Want To Learn: ")
-  priority=input("Priority(High/Medium/Low): ")
-  deadline=input("Set A Deadline In Days: ")
-  tasks.append({"skill":skill,"status":"pending","priority":priority,"deadline":deadline})
-  save_tasks()
-  print(f"Task'{skill}'Added Successfully!!")
-def completeSkill():
-  show_tasks()
-  skill_name=input("Enter the skill you want to complete:")
-  for task in tasks:
-    if task["skill"].lower()==skill_name.lower():
-      task["status"]="completed"
-      save_tasks()
-      print(f"Congrats! You Have completed '{task['skill']}'")
-      return
-  print("Skill Not Found!")
+  skillName=input("Enter The Skill to learn:")
+  priority=input("Enter the priorrity(High/Medium/Low):")
+  deadline=input("Enter the deadline in days:")
+
+  skill={"name":skillName, "priority":priority,"deadline":deadline, "status":"Pending"}
+  skills.append(skill)
+
+  print(f"Skill'{skillName}' added succesfully!")
+  print(motivation())
+
+def showSkill():
+  if not skills:
+    print("No skill Avalable")
+  else:
+    print("YOUR SKILLS:")
+    for i, skill in enumerate(skills,1):
+      print(f"{i}.{skill['name']}| priority:{skill['priority']}| Deadline:{skill["deadline"]}|Status:{skill['status']}")
+  print(motivation())
 
 def deleteSkill():
-    show_tasks()
-    skill_name=input("Enter the skill you want to delete")
-    global tasks
-    tasks=[task for task in tasks if task["skill"].lower() !=skill_name.lower()]
-    save_tasks()
-    print(f"'{skill_name}' has been deleted.")
-    
-def show_tasks():
-    if not tasks:
-      print("No Skills Added Yet.")
+    if not skills:
+      print("No skill to delete.")
       return
-    #print("Debugging tasks:", tasks)
-    print("Your Tech Learning Tasks:")
-    for task in tasks:
-      print(f"{task['skill']} | Status:{task['status']} | Priority:{task['priority']} | Deadline:{task['deadline']}")
-def save_tasks():
-    with open("tasks.json","w" )as file:
-      json.dump(tasks,file,indent=4)
-def showMotivation():
-    print(f"Today's Motivation:{random.choice(quotes)}")
+    showSkill()
+    skillName=input("Enter the skill name to delete:")
+
+    for skill in skills:
+      if skill["name"].lower()==skillName.lower():
+        skills.remove(skill)
+        print(f"Skill'{skillName}' deleted succesfully!")
+        print(motivation())
+        return
+      
+    print("Task not found!")
+
 def main():
     while True:
-      showMotivation()
-      print("Tech Skill Tracker")
-      print("1 Add Skill")
-      print("2 Mark as Completed")
-      print("3 Remove Skill")
-      print("4 Show Tasks")
-      print("5 Exit")
-      choice=input("Select an option: ")
-      if choice=="1":
-        addSkill()
-      elif choice=="2":
-        completeSkill()
-      elif choice=="3":
-        deleteSkill()
-      elif choice=="4":
-        show_tasks()
-      elif choice=="5":
-        print("Keep Learning  & Coding,, Goodbye!!")
-        break
-      else:
-        print("Invalid Choice. Try Again.")
+        print("\n1. Add Skill\n2. Show Skills\n3. Delete Skill\n4. Exit")
+        choice = input("Choose an option: ")
 
-if __name__=="__main__":
+        if choice == "1":
+            addSkill()
+        elif choice == "2":
+            showSkill()
+        elif choice == "3":
+            deleteSkill()
+        elif choice == "4":
+            print("Exiting Skill Tracker, Goodbye!")
+            print("'Believe you can and you’re halfway there.' – Theodore Roosevelt")
+            break
+        else:
+            print("Invalid choice. Please retry.")
+
+if __name__ == "__main__":
     main()
-      
